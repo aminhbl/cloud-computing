@@ -1,0 +1,7 @@
+{
+  "server_port": 8080,
+  "exp_time": 10,
+  "database_host": "my-database",
+  "database_password": "my-secret-pw",
+  "database_name": "url"
+}
