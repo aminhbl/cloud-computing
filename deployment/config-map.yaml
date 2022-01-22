@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: url-sh-config
+data:
+  config.json: |
+    {
+      "server_port": 8080,
+      "exp_time": 1,
+      "database_host": "db-svc",
+      "database_password": "",
+      "database_name": ""
+    }
