@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stateful-db
+spec:
+  selector:
+    matchLabels:
+      app: stateful-db
+  serviceName: "db-svc"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: stateful-db
+    spec:
+      containers:
+      - image: mysql:8.0.28
+        resources: { }
+        name: db-cont
+        ports:
+          - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database_password
+                name: db-secret
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database_password
+                name: db-secret
+        volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-persistent-storage
+      spec:
+        resources:
+          requests:
+            storage: 1Gi
+        accessModes:
+          - ReadWriteOnce

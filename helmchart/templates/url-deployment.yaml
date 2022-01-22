@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: url-sh
+  name: url-sh
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: url-sh
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: url-sh
+    spec:
+      containers:
+      - image: amir79naziri/url_sh:1.1
+        name: url-sh-cont
+        ports:
+          - containerPort: 8080
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+        env:
+          - name: database_name
+            valueFrom:
+              secretKeyRef:
+                key: database_name
+                name: db-secret
+          - name: database_password
+            valueFrom:
+              secretKeyRef:
+                key: database_password
+                name: db-secret
+        volumeMounts:
+          - mountPath: /config.json
+            subPath: config.json
+            name: config-map
+      volumes:
+        - name: config-map
+          configMap:
+            name: url-sh-config
+status: {}
